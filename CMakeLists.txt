@@ -3,6 +3,7 @@ project(STLViewer)
 
 # Set preference for GLVND
 set(OpenGL_GL_PREFERENCE "GLVND")
+set(CMAKE_BUILD_TYPE Debug)
 
 # Find OpenGL package
 find_package(OpenGL REQUIRED)
