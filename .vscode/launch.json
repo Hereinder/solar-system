@@ -2,7 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug C++",
+            "name": "Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/STLViewer", // Change this to your actual executable name
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build"
+        },
+        {
+            "name": "NoDebug",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/STLViewer", // Change this to your actual executable name
@@ -11,14 +31,17 @@
             "cwd": "${workspaceFolder}/build",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "preLaunchTask": "build"
         }
-    ]
-}
+    ],
+    "compounds": [
+        {
+            "name": "Server/Client",
+            "configurations": [
+                "Debug",
+                "NoDebug"
+            ],
+            "preLaunchTask": "${defaultBuildTask}",
+            "stopAll": true
+        }
+    }

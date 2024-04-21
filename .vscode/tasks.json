@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "ninja",
+            "args": [
+                "-C",
+                "${workspaceFolder}\\build",
+                "all"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "start",
+            "type": "shell",
+            "command": "${workspaceFolder}\\build\\STLViewer.exe",
+            "args": [],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": "$gcc",
+            "dependsOn": "build"
+        }
+    ]
+}
