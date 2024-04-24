@@ -1,12 +1,15 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <signal.h>
 
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
+#include "Indexbuffer.hpp"
+#include "VertexArray.hpp"
+#include "VertexBuffer.hpp"
+#include "VertexBufferLayout.hpp"
 #include "glTools.hpp"
 #include "shader.hpp"
 
@@ -39,71 +42,6 @@ GLFWwindow* init() {
     return window;
 }
 
-struct Index {
-    unsigned int VAO;
-    unsigned int ibo;
-};
-
-Index createTriangle1() {
-    float positions[] = {
-        // positions         // colors
-        -0.0f, -0.0f, 0.0f,  // 0
-        1.0f,  -0.0f, 0.0f,  // 1
-        1.0f,  1.0f,  0.0f,  // 2
-        -0.0f, 1.0f,  0.0f,  // 3
-
-    };
-
-    unsigned int indices[] = {0, 1, 2, 2, 3, 0};
-
-    unsigned int buffer, VAO, ibo;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &buffer);
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
-    glEnableVertexAttribArray(0);
-
-    return {VAO, ibo};
-}
-
-Index createTriangle2() {
-    float positions[] = {
-        // positions         // colors
-        -0.5f, -0.5f, 0.0f,  // 0
-        0.5f,  -0.5f, 0.0f,  // 1
-        0.5f,  0.5f,  0.0f,  // 2
-        -0.5f, 0.5f,  0.0f,  // 3
-
-    };
-
-    unsigned int indices[] = {0, 1, 2, 2, 3, 0};
-
-    unsigned int buffer, VAO, ibo;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &buffer);
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
-    glEnableVertexAttribArray(0);
-
-    return {VAO, ibo};
-}
-
 void rotateTriangle(unsigned int shader) {
     // create transformations
     glm::mat4 transform = glm::mat4(1.0f);  // make sure to initialize matrix to identity matrix first
@@ -118,9 +56,46 @@ int main(void) {
     GLFWwindow* window = init();
 
     unsigned int shader1, shader2;
-    Index id1, id2;
-    GLCall(id1 = createTriangle1());
-    GLCall(id2 = createTriangle2());
+
+    ////////////////////////////////
+    float positions[] = {
+        // positions         // colors
+        -0.0f, -0.0f, 0.0,  // 0
+        1.0f,  -0.0f, 0.0,  // 1
+        1.0f,  1.0f,  0.0,  // 2
+        -0.0f, 5.0f,  0.0,  // 3
+
+    };
+
+    float positions2[] = {
+        // positions         // colors
+        -1.0f, -0.0f, 0.0,  // 0
+        0.5f,  -0.0f, 0.0,  // 1
+        0.5f,  1.0f,  0.0,  // 2
+        -0.0f, 5.0f,  0.0,  // 3
+
+    };
+
+    unsigned int indices[] = {0, 1, 2, 2, 3, 0};
+
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    VertexArray va;
+    VertexBuffer vb(positions, sizeof(positions));
+    VertexBuffer vb2(positions2, sizeof(positions2));
+
+    VertexBufferLayout layout;
+    layout.Push<float>(3);
+
+    va.AddBuffer(vb, layout);
+
+    IndexBuffer ib(indices, 6);
+    ib.Unbinde();
+    vb.Unbinde();
+
+    ////////////////////////////////
 
     GLCall(shader1 = GLLoadShader());
     GLCall(shader2 = GLLoadShader());
@@ -156,15 +131,10 @@ int main(void) {
         GLCall(glUseProgram(shader1));
         GLCall(glUniform4f(location1, r, 1.0f, 0.0f, 1.0f));
 
-        GLCall(glBindVertexArray(id1.VAO));
-        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id1.ibo));
+        va.Bind();
+        ib.Bind();
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
-        GLCall(glUseProgram(shader2));
-        GLCall(glUniform4f(location2, 1.0f, r, 0.0f, 1.0f));
-        GLCall(glBindVertexArray(id2.VAO));
-        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id2.ibo));
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
         /*---------------------------- */
 
         /* Swap front and back buffers */

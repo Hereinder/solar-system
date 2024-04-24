@@ -72,8 +72,8 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
     return program;
 }
 
-unsigned int GLLoadShader() {
-    ShaderSource shaderSource = ParseShader("../files/shaders/Basic.shader");
+unsigned int GLLoadShader(const std::string& path) {
+    ShaderSource shaderSource = ParseShader(path);
     unsigned int shader = CreateShader(shaderSource.VertexShader, shaderSource.FragmentShader);
     glUseProgram(shader);
     return shader;

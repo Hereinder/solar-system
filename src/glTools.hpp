@@ -1,24 +1,24 @@
 #pragma once
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
+#ifdef __linux__
+// linux code goes here
+#include <signal.h>
 #define ASSERT(x) \
-    if (!(x)) raise(SIGTRAP);
+    if (!(x))     \
+        __debugbreak();
+#elif _WIN32
+// windows code goes here
+#define ASSERT(x) \
+    if (!(x))     \
+        __debugbreak();
+#else
+
+#endif
 
 #define GLCall(x)   \
     GLClearError(); \
     x;              \
     ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
-static void GLClearError() {
-    while (glGetError() != GL_NO_ERROR)
-        ;
-}
-
-static bool GLLogCall(const char* function, const char* file, int line) {
-    while (GLuint error = glGetError()) {
-        std::cout << "[ERROR OpenGL]: " << error << " | " << file << " : " << function << " : " << line << "\n";
-        return false;
-    }
-    return true;
-}
+bool GLLogCall(const char* function, const char* file, int line);
+void GLClearError();
