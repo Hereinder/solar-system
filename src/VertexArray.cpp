@@ -15,12 +15,12 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 
     for (unsigned int i = 0; i < elements.size(); i++) {
         const auto& element = elements[i];
-        glEnableVertexAttribArray(i);
-        glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(),
-                              (const void*)offset);
+        GLCall(glEnableVertexAttribArray(i));
+        GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(),
+                                     (const void*)offset));
         offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
     }
 }
 
-void VertexArray::Bind() const { glBindVertexArray(m_Renderer_Id); }
-void VertexArray::UnBind() const { glBindVertexArray(0); }
+void VertexArray::Bind() const { GLCall(glBindVertexArray(m_Renderer_Id)); }
+void VertexArray::UnBind() const { GLCall(glBindVertexArray(0)); }
