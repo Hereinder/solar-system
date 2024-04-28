@@ -15,6 +15,8 @@
 
 #endif
 
+constexpr float to_radian(float angle) { return angle * 3.14 / 180; }
+
 #define GLCall(x)   \
     GLClearError(); \
     x;              \
