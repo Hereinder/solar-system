@@ -1,80 +1,39 @@
 #pragma once
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include <fstream>
-#include <sstream>
-
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <string>
+#include <unordered_map>
 struct ShaderSource {
     std::string VertexShader;
     std::string FragmentShader;
 };
 
-static ShaderSource ParseShader(const std::string& file) {
-    std::ifstream stream(file);
-    if (stream.fail()) {
-        std::cout << "[ERROR OpenGL:Shader] : input file parsing error\n";
-    }
-    enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1 };
+class Shader {
+public:
+    Shader(const std::string& fileName);
+    ~Shader();
 
-    std::string line;
-    std::stringstream ss[2];
-    ShaderType type = ShaderType::NONE;
+    void Bind() const;
+    void Unbind() const;
 
-    while (getline(stream, line)) {
-        if (line.find("#shader") != std::string::npos) {
-            if (line.find("vertex") != std::string::npos) {
-                type = ShaderType::VERTEX;
-            } else if (line.find("fragment") != std::string::npos) {
-                type = ShaderType::FRAGMENT;
-            }
-        } else {
-            ss[static_cast<int>(type)] << line << '\n';
-        }
-    }
-    return {ss[static_cast<int>(ShaderType::VERTEX)].str(), ss[static_cast<int>(ShaderType::FRAGMENT)].str()};
-}
+    // uniforms
+    void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+    void SetUniform3f(const std::string& name, float v0, float v1, float v2);
+    void SetUniform2f(const std::string& name, float v0, float v1);
+    void SetUniform1f(const std::string& name, float v0);
 
-static unsigned int CompileShader(unsigned int type, const std::string& source) {
-    unsigned int id = glCreateShader(type);
-    const char* src = source.c_str();
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
+    void SetUniform1i(const std::string& name, int v0);
 
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-    if (result == GL_FALSE) {
-        int length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        char* message = (char*)alloca(length * sizeof(char));
-        glGetShaderInfoLog(id, length, &length, message);
-        std::cout << message << "\n";
-        glDeleteShader(id);
-        return 0;
-    }
-    // TODO:  handle error
-    return id;
-}
+    void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader) {
-    unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+private:
+    ShaderSource ParseShader();
+    unsigned int CompileShader(unsigned int type, const std::string& source);
+    unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
+    int GetUniformLocation(const std::string& name);
 
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
-}
-
-unsigned int GLLoadShader(const std::string& path) {
-    ShaderSource shaderSource = ParseShader(path);
-    unsigned int shader = CreateShader(shaderSource.VertexShader, shaderSource.FragmentShader);
-    glUseProgram(shader);
-    return shader;
-}
+private:
+    unsigned int m_RendererID;
+    std::string m_FilePath;
+    std::unordered_map<std::string, int> m_UniformLocationCache;
+};
