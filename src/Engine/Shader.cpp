@@ -107,6 +107,7 @@ int Shader::GetUniformLocation(const std::string& name) {
 
     int location = 0;
     GLCall(location = glGetUniformLocation(m_RendererID, name.c_str()));
+
     if (location == -1) {
         std::cout << "[WARNING OpenGL:Shader] : uniform " << name << " doesnt exist. Creating! \n";
     }
