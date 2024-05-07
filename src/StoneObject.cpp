@@ -2,9 +2,9 @@
 
 StoneObject::~StoneObject() { std::cout << "StoneObject Destructor \n"; };
 
-void StoneObject::Batch(float x, float y, float z) {
+void StoneObject::Batch(float x, float y, float z, float angle) {
     std::vector<float> single{
-        // positions 2    // texture2
+        //         positions 3             // texture 2  // normals 3
         x + -50.0f, y + -50.0f, z + -50.0f, 0.0f, 0.0f, 0.0f,   0.0f,   -50.0f,  //
         x + 50.0f,  y + -50.0f, z + -50.0f, 1.0f, 0.0f, 0.0f,   0.0f,   -50.0f,  //
         x + 50.0f,  y + 50.0f,  z + -50.0f, 1.0f, 1.0f, 0.0f,   0.0f,   -50.0f,  //

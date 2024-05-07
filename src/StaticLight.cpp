@@ -70,16 +70,14 @@ void StaticLight::UnBind() {
     m_ib->Unbinde();
 }
 
-void StaticLight::Draw(const glm::mat4& proj, const glm::mat4& view, const glm::vec3& campos) {
+void StaticLight::Draw(const glm::mat4& proj, const glm::mat4& view, const glm::vec3&) {
     Bind();
     glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
 
     glm::mat4 mvp;
-    glm::mat4 rot0 = glm::mat4(1.0f);
-    {
-        model = glm::rotate(model, (float)glfwGetTime() / 100, glm::vec3(0.5f, 1.0f, 0.0f));
-        mvp = proj * view * model;
-    }
+    // glm::mat4 rot0 = glm::mat4(1.0f);
+    model = glm::rotate(model, (float)glfwGetTime() / 10, glm::vec3(0.0f, 1.0f, 0.0f));
+    mvp = proj * view * model;
 
     m_Shader->SetUniformMat4f("u_MVP", mvp);
     GLCall(glDrawElements(GL_TRIANGLES, m_ib->GetCount(), GL_UNSIGNED_INT, nullptr));

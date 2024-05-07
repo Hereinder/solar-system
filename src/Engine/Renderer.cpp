@@ -20,8 +20,8 @@ void Renderer::LoadMesh() {
 }
 
 void Renderer::Draw(const glm::mat4& proj, const glm::mat4& view, const glm::vec3& campos) const {
-    m_ObjectList[0]->Bind();
     for (auto const obj : m_ObjectList) {
+        obj->Bind();
         obj->Draw(proj, view, campos);
     }
 }

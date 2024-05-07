@@ -25,8 +25,9 @@ void CameraModel::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     camera->ProcessKeyboard(direction, deltaTime);
 }
 
-void CameraModel::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
+void CameraModel::mouse_callback(GLFWwindow*, double xposIn, double yposIn) {
     if (camera->GetCursorMode() != GLFW_CURSOR_DISABLED) {
+        camera->firstMouse = true;
         return;
     }
     float xpos = static_cast<float>(xposIn);
@@ -47,9 +48,9 @@ void CameraModel::mouse_callback(GLFWwindow* window, double xposIn, double yposI
     camera->ProcessMouseMovement(xoffset, yoffset);
 }
 
-void CameraModel::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {}
+void CameraModel::scroll_callback(GLFWwindow*, double, double) {}
 
-void CameraModel::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void CameraModel::key_callback(GLFWwindow*, int key, int, int action, int) {
     if (key == GLFW_KEY_A && action == GLFW_PRESS) {
         camera->map[CameraModel::Camera_Movement::LEFT] = true;
     }
@@ -89,8 +90,8 @@ void CameraModel::key_callback(GLFWwindow* window, int key, int scancode, int ac
     }
 }
 
-void CameraModel::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS) {
+void CameraModel::mouse_button_callback(GLFWwindow* window, int button, int action, int) {
+    if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
         if (camera->GetCursorMode() != GLFW_CURSOR_NORMAL) {
             camera->SetCursorMode(GLFW_CURSOR_NORMAL);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

@@ -7,24 +7,20 @@ public:
     StoneObject() = delete;
     StoneObject(glm::vec3 trans, const std::string& shaderPath = "", const std::string& texturePath = "")
         : StaticObject(shaderPath, texturePath), translation(trans) {
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
         m_TextureAvailable = texturePath.size() > 0 ? true : false;
+        Batch(trans.x, trans.y, trans.z, 45);
     };
 
     ~StoneObject();
     void LoadMesh();
     void Draw(const glm::mat4& proj, const glm::mat4& view, const glm::vec3& campos);
     void Bind();
-    void Batch(float x, float y, float z);
+    void Batch(float x, float y, float z, float angle);
     void UnBind();
 
 private:
     std::vector<float> positions;
     std::vector<unsigned int> indices;
-    float anglx = 30;
-    float angly = 30;
-    float anglz = 0;
-    int cnt = 0;
     glm::vec3 translation;
     glm::mat4 model;
 

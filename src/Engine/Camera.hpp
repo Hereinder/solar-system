@@ -24,12 +24,12 @@ namespace CameraModel {
         // constructor with vectors
         Camera(unsigned int screenWidth, unsigned int screenHeight, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
                glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0, float pitch = 0.0)
-            : m_ScreenWidth(screenWidth),
-              m_ScreenHeight(screenHeight),
-              Front(glm::vec3(0.0f, 0.0f, -1.0f)),
+            : Front(glm::vec3(0.0f, 0.0f, -1.0f)),
               MovementSpeed(SPEED),
               MouseSensitivity(SENSITIVITY),
-              Zoom(ZOOM) {
+              Zoom(ZOOM),
+              m_ScreenWidth(screenWidth),
+              m_ScreenHeight(screenHeight) {
             Position = position;
             WorldUp = up;
             Yaw = yaw;
@@ -43,12 +43,12 @@ namespace CameraModel {
         // constructor with scalar values
         Camera(unsigned int screenWidth, unsigned int screenHeight, float posX, float posY, float posZ, float upX,
                float upY, float upZ, float yaw, float pitch)
-            : m_ScreenWidth(screenWidth),
-              m_ScreenHeight(screenHeight),
-              Front(glm::vec3(0.0f, 0.0f, -1.0f)),
+            : Front(glm::vec3(0.0f, 0.0f, -1.0f)),
               MovementSpeed(SPEED),
               MouseSensitivity(SENSITIVITY),
-              Zoom(ZOOM) {
+              Zoom(ZOOM),
+              m_ScreenWidth(screenWidth),
+              m_ScreenHeight(screenHeight) {
             Position = glm::vec3(posX, posY, posZ);
             WorldUp = glm::vec3(upX, upY, upZ);
             Yaw = yaw;
@@ -113,8 +113,8 @@ namespace CameraModel {
                 Zoom = 45.0f;
         }
 
-        void SetCursorMode(uint32_t mode) { cursor_mode = mode; }
-        uint32_t GetCursorMode() { return cursor_mode; }
+        void SetCursorMode(uint32_t mode) { m_CursorMode = mode; }
+        uint32_t GetCursorMode() { return m_CursorMode; }
 
     private:
         // calculates the front vector from the Camera's (updated) Euler Angles
@@ -167,7 +167,7 @@ namespace CameraModel {
         std::thread* loop;
         unsigned int m_ScreenWidth;
         unsigned int m_ScreenHeight;
-        uint32_t cursor_mode = GLFW_CURSOR_DISABLED;
+        uint32_t m_CursorMode = GLFW_CURSOR_NORMAL;
     };
 
     void init(unsigned int screenWidth, unsigned int screenHeight);

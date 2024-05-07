@@ -52,13 +52,13 @@ void TreeObject::LoadMesh() {
     m_vbo->Unbinde();
 };
 
-void TreeObject::Draw(float *ang) {
+void TreeObject::Draw(const glm::mat4&, const glm::mat4&, const glm::vec3&) {
     glm::vec3 translation(300, 300, 0);
     glm::mat4 proj;
     glm::mat4 view;
     glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
     glm::mat4 mvp;
-    glm::mat4 rot0 = glm::mat4(1.0f);
+    // glm::mat4 rot0 = glm::mat4(1.0f);
     {
         proj = glm::ortho(0.0f, float(640), 0.0f, float(480), -850.0f, 1550.0f);
         view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
@@ -81,3 +81,5 @@ void TreeObject::Draw(float *ang) {
 
     GLCall(glDrawElements(GL_TRIANGLES, m_ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 };
+
+void TreeObject::Bind() {}

@@ -8,7 +8,7 @@
 
 #include "glTools.hpp"
 
-Shader::Shader(const std::string& fileName) : m_FilePath(fileName), m_RendererID(0) {
+Shader::Shader(const std::string& fileName) : m_RendererID(0), m_FilePath(fileName) {
     ShaderSource shaderSource = ParseShader();
     m_RendererID = CreateShader(shaderSource.VertexShader, shaderSource.FragmentShader);
 }

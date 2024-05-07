@@ -7,13 +7,12 @@ public:
     StaticLight() = delete;
     StaticLight(glm::vec3 trans, const std::string& shaderPath, const std::string& texturePath = "")
         : StaticObject(shaderPath, texturePath), translation(trans) {
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
         Batch(0, 0, 0);
     };
 
     ~StaticLight();
     void LoadMesh();
-    void Draw(const glm::mat4& proj, const glm::mat4& view, const glm::vec3& campos );
+    void Draw(const glm::mat4& proj, const glm::mat4& view, const glm::vec3& campos);
     void Bind();
     void Batch(float x, float y, float z);
     void UnBind();

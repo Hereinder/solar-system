@@ -9,12 +9,15 @@ class Timer {
     timep_t _start = Clock::now(), _end = {};
 
 public:
-    void start() {
+    void reset() {
         _end = timep_t{};
         _start = Clock::now();
     }
 
-    void tick() { _end = Clock::now(); }
+    const Timer& tick() {
+        _end = Clock::now();
+        return *this;
+    }
 
     auto ms() const { return std::chrono::duration_cast<mili>(_end - _start); }
 
