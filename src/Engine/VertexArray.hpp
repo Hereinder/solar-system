@@ -16,4 +16,5 @@ public:
 
 private:
     unsigned int m_Renderer_Id;
+    unsigned int m_ElementsCount;
 };

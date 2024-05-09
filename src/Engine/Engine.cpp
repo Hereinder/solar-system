@@ -8,6 +8,19 @@
 #include <random>
 
 #include "Gui.hpp"
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    Camera::getInstance().mouse_callback(window, xpos, ypos);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    Camera::getInstance().scroll_callback(window, xoffset, yoffset);
+}
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    Camera::getInstance().key_callback(window, key, scancode, action, mods);
+}
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    Camera::getInstance().mouse_button_callback(window, button, action, mods);
+}
 
 Engine::Engine() {
     window = Init();
@@ -16,10 +29,11 @@ Engine::Engine() {
     }
 
     glfwGetWindowSize(window, &m_Width, &m_Height);
-    CameraModel::init(m_Width, m_Height);
+    Camera::getInstance().init(m_Width, m_Height, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0, 0.0);
     Gui::init(window);
 
-    Prepare();
+    // Prepare();
+    PrepareInstance();
     m_FrameTimer.reset();
     m_GlobalTimer.reset();
 }
@@ -55,10 +69,10 @@ GLFWwindow* Engine::Init() {
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-    glfwSetCursorPosCallback(window, CameraModel::mouse_callback);
-    glfwSetScrollCallback(window, CameraModel::scroll_callback);
-    glfwSetKeyCallback(window, CameraModel::key_callback);
-    glfwSetMouseButtonCallback(window, CameraModel::mouse_button_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
     return window;
 }
 

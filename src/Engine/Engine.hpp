@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Camera.hpp"
+#include "InstancingObject.hpp"
 #include "Renderer.hpp"
 #include "StaticLight.hpp"
 #include "StoneObject.hpp"
@@ -23,6 +24,7 @@ private:
     void CalculateFPS();
     bool CheckDrawTime(const int fps);
     void Prepare();
+    void PrepareInstance();
 
 private:
     GLFWwindow* window;
