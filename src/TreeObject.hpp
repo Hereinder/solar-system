@@ -13,6 +13,6 @@ public:
     void Bind();
 
 private:
-    std::vector<float> positions;
-    std::vector<unsigned int> indices;
+    std::vector<float> m_VertexData;
+    std::vector<unsigned int> m_Indices;
 };
