@@ -19,6 +19,8 @@ private:
     void ModifyElement(int offset, int count);
     void AliveElement(int offset, int count);
 
+    void rebuild();
+
 private:
     std::vector<float> m_VertexData;
     std::vector<unsigned int> m_Indices;
@@ -27,7 +29,10 @@ private:
     VertexBufferLayout layoutTransform;
     std::unique_ptr<VertexBuffer> m_vboTransform;
     std::vector<glm::mat4> modelMatrices;
+    std::vector<glm::mat4> modelMatrices2;
 
     bool m_TextureAvailable;
     std::shared_mutex m_Mutex;
+
+    bool needToRebuild = true;
 };
