@@ -24,3 +24,18 @@ constexpr float to_radian(float angle) { return angle * 3.14 / 180; }
 
 bool GLLogCall(const char* function, const char* file, int line);
 void GLClearError();
+
+inline constexpr double calcPow(float x, int y) {
+    float temp = 0;
+    if (y == 0)
+        return 1;
+    temp = calcPow(x, y / 2);
+    if ((y % 2) == 0) {
+        return temp * temp;
+    } else {
+        if (y > 0)
+            return x * temp * temp;
+        else
+            return (temp * temp) / x;
+    }
+}
